@@ -4,7 +4,6 @@ import dev.jake.kfit.metrics.HealthResponse
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 
@@ -14,7 +13,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 
-class HealthTest {
+class MetricsTest {
 
     @Test
     fun `health returns ok as json`() = testApplication {
