@@ -5,7 +5,7 @@ import dagger.Provides
 import java.time.Clock
 import javax.inject.Singleton
 
-// used to provide custom implementations of dependencies
+// used to provide custom implementations of dependencies we don't control (can't add @Inject constructor() )
 @Module
 object AppModule {
 
@@ -15,7 +15,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideBuildInfo(): BuildInfo = BuildInfo(version = "1.0-SNAPSHOT")
+    fun provideBuildInfo(): BuildInfo = BuildInfo(version = VERSION)
+
+    private const val VERSION = "1.0-SNAPSHOT"
 }
 
 data class BuildInfo(val version: String)
