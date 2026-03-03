@@ -1,6 +1,6 @@
 package dev.jake.kfit
 
-import dev.jake.kfit.metrics.HealthResponse
+import dev.jake.kfit.di.DaggerAppComponent
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -20,10 +20,13 @@ fun Application.module() {
         json()
     }
 
+    val appComponent = DaggerAppComponent.create()
+    val metricsService = appComponent.metricsService()
+
     routing {
         get("/") {call.respondText("Welcome to kFit")}
         get("/health") {
-            call.respond(HealthResponse(status = "ok"))
+            call.respond(metricsService.healthCheck())
         }
     }
 }

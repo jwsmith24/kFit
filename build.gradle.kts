@@ -1,10 +1,13 @@
+
+
 plugins {
-    kotlin("jvm") version "2.3.0"
-    kotlin("plugin.serialization") version "1.9.22"
+    kotlin("jvm") version "2.1.20"
+    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("kapt") version "2.1.20"
     application
 }
-
 group = "dev.jake"
+
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -13,6 +16,7 @@ repositories {
 
 val ktorVersion: String by project
 val logbackVersion: String by project
+val daggerVersion: String by project
 
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktorVersion")
@@ -21,10 +25,13 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
-    implementation("io.ktor:ktor-server-content-negotiation:${ktorVersion}")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:${ktorVersion}")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    testImplementation("io.ktor:ktor-server-test-host:${ktorVersion}")
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))
 }
 
@@ -32,9 +39,5 @@ application {
     mainClass.set("dev.jake.kfit.AppKt")
 }
 kotlin {
-    jvmToolchain(23)
-}
-
-tasks.test {
-    useJUnitPlatform()
+    jvmToolchain(21)
 }
