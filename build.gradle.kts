@@ -33,6 +33,9 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))
+    testImplementation("io.ktor:ktor-client-core:${ktorVersion}")
+    testImplementation("io.ktor:ktor-client-content-negotiation:${ktorVersion}")
+    testImplementation("io.ktor:ktor-serialization-kotlinx-json:${ktorVersion}")
 }
 
 application {
