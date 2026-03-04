@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "2.1.20"
     kotlin("plugin.serialization") version "2.1.20"
     kotlin("kapt") version "2.1.20"
-    id("nu.studer.jooq") version "8.2"
+    id("nu.studer.jooq") version "9.0"
     application
 }
 group = "dev.jake"
@@ -64,31 +64,31 @@ kotlin {
 }
 
 
-//jooq {
-//    version.set(jooqVersion)
-//    configurations {
-//        create("main") {
-//            jooqConfiguration.apply {
-//                jdbc.apply {
-//                    driver = "org.postgresql.Driver"
-//                    url = "jdbc:postgresql://localhost:5432/mydb"
-//                    user = "postgres"
-//                    password = "password"
-//                }
-//                generator.apply {
-//                    database.apply {
-//                        name = "org.jooq.meta.postgres.PostgresDatabase"
-//                        inputSchema = "public"
-//                    }
-//                    target.apply {
-//                        packageName = "com.example.generated"
-//                        directory = "src/main/generated"
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
+jooq {
+    version.set(jooqVersion)
+    configurations {
+        create("main") {
+            jooqConfiguration.apply {
+                jdbc.apply {
+                    driver = "org.postgresql.Driver"
+                    url = "jdbc:postgresql://localhost:5432/kfit_db"
+                    user = "kfit"
+                    password = "kfit"
+                }
+                generator.apply {
+                    database.apply {
+                        name = "org.jooq.meta.postgres.PostgresDatabase"
+                        inputSchema = "public"
+                    }
+                    target.apply {
+                        packageName = "com.example.generated"
+                        directory = "src/main/generated"
+                    }
+                }
+            }
+        }
+    }
+}
 
     // add generated jooq code to classpath
 sourceSets.main {
