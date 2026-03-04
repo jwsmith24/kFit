@@ -1,5 +1,7 @@
 package dev.jake.kfit
 
+import dev.jake.generated.tables.Users
+import dev.jake.generated.tables.Users.USERS
 import dev.jake.kfit.di.DaggerAppComponent
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
@@ -21,14 +23,12 @@ fun Application.module() {
         json()
     }
 
-    val dataSource = createDataSource()
-    val dsl = createDSLContext(dataSource)
 
     val appComponent = DaggerAppComponent.create()
-    val metricsService = appComponent.metricsService()
+    val dsl = appComponent.dslContext()
 
     Flyway.configure()
-        .dataSource(dataSource)
+        .dataSource(appComponent.dataSource())
         .locations("classpath:db/migration")
         .load()
         .migrate()
@@ -36,12 +36,17 @@ fun Application.module() {
     routing {
         get("/") {call.respondText("Welcome to kFit")}
         get("/health") {
-            call.respond(metricsService.healthCheck())
+            call.respond(appComponent.metricsService().healthCheck())
         }
-//        get("/users") {
-//            val users = dsl
-//                .select(USERS.ID, USERS.NAME)
-//        }
+        get("/users") {
+            val users = dsl
+                .select(USERS.ID, USERS.NAME)
+                .from(USERS)
+                // can pass the transform function directly into fetch as lambda
+                .fetch{ "${it[USERS.ID]}: ${it[USERS.NAME]}"}
+
+            call.respond(users)
+        }
 
     }
 }
