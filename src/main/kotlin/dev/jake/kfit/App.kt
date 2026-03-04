@@ -25,7 +25,7 @@ fun Application.module() {
 
 
     val appComponent = DaggerAppComponent.create()
-    val dsl = appComponent.dslContext()
+    val userRepository = appComponent.userRepository()
 
     Flyway.configure()
         .dataSource(appComponent.dataSource())
@@ -38,15 +38,7 @@ fun Application.module() {
         get("/health") {
             call.respond(appComponent.metricsService().healthCheck())
         }
-        get("/users") {
-            val users = dsl
-                .select(USERS.ID, USERS.NAME)
-                .from(USERS)
-                // can pass the transform function directly into fetch as lambda
-                .fetch{ "${it[USERS.ID]}: ${it[USERS.NAME]}"}
-
-            call.respond(users)
-        }
+        get("/users") { call.respond(userRepository.findAll()) }
 
     }
 }
