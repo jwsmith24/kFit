@@ -71,7 +71,7 @@ jooq {
             jooqConfiguration.apply {
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
-                    url = "jdbc:postgresql://localhost:5432/kfit_db"
+                    url = "jdbc:postgresql://localhost:5435/kfit_db"
                     user = "kfit"
                     password = "kfit"
                 }
@@ -81,7 +81,7 @@ jooq {
                         inputSchema = "public"
                     }
                     target.apply {
-                        packageName = "com.example.generated"
+                        packageName = "dev.jake.generated"
                         directory = "src/main/generated"
                     }
                 }
