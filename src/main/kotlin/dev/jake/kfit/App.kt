@@ -8,6 +8,7 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.flywaydb.core.Flyway
 
 fun main() {
     embeddedServer(Netty, port = 8080) {
@@ -20,13 +21,27 @@ fun Application.module() {
         json()
     }
 
+    val dataSource = createDataSource()
+    val dsl = createDSLContext(dataSource)
+
     val appComponent = DaggerAppComponent.create()
     val metricsService = appComponent.metricsService()
+
+    Flyway.configure()
+        .dataSource(dataSource)
+        .locations("classpath:db/migration")
+        .load()
+        .migrate()
 
     routing {
         get("/") {call.respondText("Welcome to kFit")}
         get("/health") {
             call.respond(metricsService.healthCheck())
         }
+//        get("/users") {
+//            val users = dsl
+//                .select(USERS.ID, USERS.NAME)
+//        }
+
     }
 }
