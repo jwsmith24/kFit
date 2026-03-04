@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version "2.1.20"
     kotlin("plugin.serialization") version "2.1.20"
     kotlin("kapt") version "2.1.20"
+    id("nu.studer.jooq") version "8.2"
     application
 }
 group = "dev.jake"
@@ -17,19 +18,36 @@ repositories {
 val ktorVersion: String by project
 val logbackVersion: String by project
 val daggerVersion: String by project
+val jooqVersion: String by project
+val postgresVersion: String by project
+val hikariVersion: String by project
+val flywayVersion: String by project
 
 dependencies {
+    // ktor
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
-
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
-
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
+    // dagger
     implementation("com.google.dagger:dagger:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+
+    // database
+    implementation("org.postgresql:postgresql:$postgresVersion")
+    implementation("com.zaxxer:HikariCP:$hikariVersion")
+
+    // jOOQ
+    implementation("org.jooq:jooq:$jooqVersion")
+    jooqGenerator("org.postgresql:postgresql:$postgresVersion")
+
+    // flyway
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
+    implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
+
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))
@@ -43,4 +61,36 @@ application {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+
+//jooq {
+//    version.set(jooqVersion)
+//    configurations {
+//        create("main") {
+//            jooqConfiguration.apply {
+//                jdbc.apply {
+//                    driver = "org.postgresql.Driver"
+//                    url = "jdbc:postgresql://localhost:5432/mydb"
+//                    user = "postgres"
+//                    password = "password"
+//                }
+//                generator.apply {
+//                    database.apply {
+//                        name = "org.jooq.meta.postgres.PostgresDatabase"
+//                        inputSchema = "public"
+//                    }
+//                    target.apply {
+//                        packageName = "com.example.generated"
+//                        directory = "src/main/generated"
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
+    // add generated jooq code to classpath
+sourceSets.main {
+    java.srcDirs("src/main/generated")
 }

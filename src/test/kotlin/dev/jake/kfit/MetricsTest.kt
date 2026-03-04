@@ -16,7 +16,7 @@ import kotlin.test.assertNotNull
 class MetricsTest {
 
     @Test
-    fun `health returns ok as json`() = testApplication {
+    fun `health returns status, version, and timestamp as json`() = testApplication {
         application { module() }
 
         val jsonClient = createClient {
