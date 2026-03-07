@@ -14,4 +14,5 @@ class WorkoutRepository @Inject constructor(private val dsl: DSLContext) {
         dsl.selectFrom(EXERCISES)
             .fetch { Exercise(id = it[EXERCISES.ID], name = it[EXERCISES.NAME]) }
 
+
 }
