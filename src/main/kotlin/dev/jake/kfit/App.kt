@@ -24,6 +24,7 @@ fun Application.module() {
     }
 
     val userRepository = DI.appComponent.userRepository()
+    val workoutRepository = DI.appComponent.workoutRepository()
 
     Flyway.configure()
         .dataSource(DI.appComponent.dataSource())
@@ -48,6 +49,10 @@ fun Application.module() {
                 ?: return@get call.respond(HttpStatusCode.NotFound)
 
             call.respond(user)
+        }
+
+        get("/workouts/exercises") {
+            call.respond(workoutRepository.findAllExercises())
         }
 
     }
