@@ -1,5 +1,6 @@
 package dev.jake.kfit
 
+import dev.jake.kfit.di.DI
 import dev.jake.kfit.di.DaggerAppComponent
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.*
@@ -22,12 +23,10 @@ fun Application.module() {
         json()
     }
 
-
-    val appComponent = DaggerAppComponent.create()
-    val userRepository = appComponent.userRepository()
+    val userRepository = DI.appComponent.userRepository()
 
     Flyway.configure()
-        .dataSource(appComponent.dataSource())
+        .dataSource(DI.appComponent.dataSource())
         .locations("classpath:db/migration")
         .load()
         .migrate()
@@ -36,7 +35,7 @@ fun Application.module() {
         get("/") {call.respondText("Welcome to kFit")}
 
         get("/health") {
-            call.respond(appComponent.metricsService().healthCheck())
+            call.respond(DI.appComponent.metricsService().healthCheck())
         }
 
         get("/users") { call.respond(userRepository.findAll()) }

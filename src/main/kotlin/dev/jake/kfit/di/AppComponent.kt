@@ -15,3 +15,7 @@ interface AppComponent {
     fun dslContext(): DSLContext
     fun userRepository(): UserRepository
 }
+
+object DI {
+    val appComponent: AppComponent = DaggerAppComponent.create()
+}
