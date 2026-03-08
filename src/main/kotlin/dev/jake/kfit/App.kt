@@ -1,6 +1,8 @@
 package dev.jake.kfit
 
 import dev.jake.kfit.di.DI
+import dev.jake.kfit.routes.userRoutes
+import dev.jake.kfit.routes.workoutRoutes
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -18,12 +20,9 @@ fun main() {
 }
 
 fun Application.module() {
-    install(ContentNegotiation) {
-        json()
-    }
+    install(ContentNegotiation) { json() }
+    install(IgnoreTrailingSlash)
 
-    val userRepository = DI.appComponent.userRepository()
-    val workoutRepository = DI.appComponent.workoutRepository()
 
     Flyway.configure()
         .dataSource(DI.appComponent.dataSource())
@@ -33,35 +32,9 @@ fun Application.module() {
 
     routing {
         get("/") {call.respondText("Welcome to kFit")}
+        get("/health") { call.respond(DI.appComponent.metricsService().healthCheck()) }
 
-        get("/health") {
-            call.respond(DI.appComponent.metricsService().healthCheck())
-        }
-
-        get("/users") { call.respond(userRepository.findAll()) }
-
-        get("/users/{id}") {
-            val id = call.parameters["id"]?.toIntOrNull()
-                ?: return@get call.respond(HttpStatusCode.BadRequest)
-
-            val user = userRepository.findById(id)
-                ?: return@get call.respond(HttpStatusCode.NotFound)
-
-            call.respond(user)
-        }
-
-        get("/workouts/exercises") {
-            call.respond(workoutRepository.findAllExercises())
-        }
-
-        get("workouts/history/{id}") {
-            val id = call.parameters["id"]?.toIntOrNull()
-                ?: return@get call.respond(HttpStatusCode.BadRequest)
-
-            val history = workoutRepository.findLiftHistoryByUserId(id)
-
-            call.respond(history)
-        }
-
+        userRoutes(DI.appComponent.userRepository())
+        workoutRoutes(DI.appComponent.workoutRepository())
     }
 }
