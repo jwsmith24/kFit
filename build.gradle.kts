@@ -1,4 +1,10 @@
-
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-core:10.20.1")
+        classpath("org.flywaydb:flyway-database-postgresql:10.20.1")
+        classpath("org.postgresql:postgresql:42.7.3")
+    }
+}
 
 plugins {
     kotlin("jvm") version "2.1.20"
@@ -14,6 +20,28 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
 }
+
+tasks.register("flywayMigrateForCodegen") {
+    doLast {
+        val flyway = org.flywaydb.core.Flyway.configure()
+            .dataSource("jdbc:postgresql://localhost:5435/kfit_db", "kfit", "kfit")
+            .locations("filesystem:src/main/resources/db/migration")
+            .load()
+        flyway.migrate()
+    }
+}
+
+afterEvaluate {
+    tasks.named("generateJooq").configure {
+        dependsOn("flywayMigrateForCodegen")
+    }
+
+    tasks.named("compileKotlin").configure {
+        dependsOn("generateJooq")
+    }
+}
+
+
 
 val ktorVersion: String by project
 val logbackVersion: String by project
@@ -81,7 +109,7 @@ jooq {
                         inputSchema = "public"
                     }
                     target.apply {
-                        packageName = "dev.jake.generated"
+                        packageName = "dev.jake.kfit.generated"
                         directory = "src/main/generated"
                     }
                 }

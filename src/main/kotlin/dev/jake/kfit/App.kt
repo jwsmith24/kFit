@@ -54,5 +54,14 @@ fun Application.module() {
             call.respond(workoutRepository.findAllExercises())
         }
 
+        get("workouts/history/{id}") {
+            val id = call.parameters["id"]?.toIntOrNull()
+                ?: return@get call.respond(HttpStatusCode.BadRequest)
+
+            val history = workoutRepository.findLiftHistoryByUserId(id)
+
+            call.respond(history)
+        }
+
     }
 }
