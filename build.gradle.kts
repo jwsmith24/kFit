@@ -32,15 +32,16 @@ tasks.register("flywayMigrateForCodegen") {
 }
 
 afterEvaluate {
+    // after migration is ran, generate jooq classes
     tasks.named("generateJooq").configure {
         dependsOn("flywayMigrateForCodegen")
     }
 
+    // ensure app isn't built until jooq classes are generated
     tasks.named("compileKotlin").configure {
         dependsOn("generateJooq")
     }
 }
-
 
 
 val ktorVersion: String by project
@@ -118,7 +119,7 @@ jooq {
     }
 }
 
-    // add generated jooq code to classpath
+// add generated jooq code to classpath
 sourceSets.main {
     java.srcDirs("src/main/generated")
 }

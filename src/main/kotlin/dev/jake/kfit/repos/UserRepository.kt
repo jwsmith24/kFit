@@ -22,5 +22,5 @@ class UserRepository @Inject constructor(private val dsl: DSLContext) {
     fun findById(id: Int): User? =
         dsl.selectFrom(USERS)
             .where(USERS.ID.eq(id))
-            .fetchOne { User(it[USERS.ID], it[USERS.NAME])}
+            .fetchOne { User(it[USERS.ID], it[USERS.NAME]) }
 }

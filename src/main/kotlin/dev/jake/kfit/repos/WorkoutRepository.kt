@@ -25,7 +25,8 @@ class WorkoutRepository @Inject constructor(private val dsl: DSLContext) {
                 LiftHistoryDTO(
                     exerciseName = it.exercise,
                     reps = it.reps,
-                    weight = it.weight)
+                    weight = it.weight
+                )
             }
 
 }

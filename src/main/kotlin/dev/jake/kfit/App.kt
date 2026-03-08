@@ -3,7 +3,6 @@ package dev.jake.kfit
 import dev.jake.kfit.di.DI
 import dev.jake.kfit.routes.userRoutes
 import dev.jake.kfit.routes.workoutRoutes
-import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -31,7 +30,7 @@ fun Application.module() {
         .migrate()
 
     routing {
-        get("/") {call.respondText("Welcome to kFit")}
+        get("/") { call.respondText("Welcome to kFit") }
         get("/health") { call.respond(DI.appComponent.metricsService().healthCheck()) }
 
         userRoutes(DI.appComponent.userRepository())

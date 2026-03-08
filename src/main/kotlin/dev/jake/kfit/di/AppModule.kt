@@ -15,13 +15,16 @@ import javax.sql.DataSource
 @Module
 object AppModule {
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideClock(): Clock = Clock.systemUTC()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideBuildInfo(): BuildInfo = BuildInfo(version = VERSION)
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideDataSource(): DataSource = HikariDataSource(HikariConfig().apply {
         jdbcUrl = "jdbc:postgresql://localhost:5435/kfit_db"
         username = "kfit"
@@ -29,7 +32,8 @@ object AppModule {
         driverClassName = "org.postgresql.Driver"
     })
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideDSLContext(dataSource: DataSource): DSLContext =
         DSL.using(dataSource, SQLDialect.POSTGRES)
 
