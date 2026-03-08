@@ -1,6 +1,6 @@
 package dev.jake.kfit.repos
 
-import dev.jake.generated.tables.Users.USERS
+import dev.jake.generated.Tables.USERS
 import kotlinx.serialization.Serializable
 import org.jooq.DSLContext
 import javax.inject.Inject

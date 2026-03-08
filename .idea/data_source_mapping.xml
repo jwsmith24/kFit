@@ -2,6 +2,7 @@
 <project version="4">
   <component name="DataSourcePerFileMappings">
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/b6c3e119-2895-4cb2-8792-95879939ab07/console.sql" value="b6c3e119-2895-4cb2-8792-95879939ab07" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1__create_lift_tables.sql" value="b6c3e119-2895-4cb2-8792-95879939ab07" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/seed/seed_exercises.sql" value="b6c3e119-2895-4cb2-8792-95879939ab07" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/seed/seed_users.sql" value="b6c3e119-2895-4cb2-8792-95879939ab07" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/seed/seed_workout.sql" value="b6c3e119-2895-4cb2-8792-95879939ab07" />
